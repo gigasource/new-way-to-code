@@ -1,3 +1,5 @@
+// This will be mock file for frontend
+
 import Hooks from 'schemahandler/hooks/hooks'
 import logicFactory from './PrintButtonLogic'
 import { ref, watchEffect } from 'vue'
