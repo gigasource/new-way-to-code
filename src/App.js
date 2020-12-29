@@ -1,11 +1,11 @@
-import statusButtonFactory from './components/StatusButton'
+import printButtonFactory from './components/PrintButton'
 
 export default {
   name: 'App',
   components: {
-    StatusButton: statusButtonFactory()
+    PrintButton: printButtonFactory().fn()
   },
   render() {
-    return <StatusButton>Test</StatusButton>
+    return <PrintButton/>
   }
 }
