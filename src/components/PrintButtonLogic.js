@@ -7,12 +7,12 @@ function logicFactory() {
 		if (order.items.find(i => !i.sent)) return "print"
 		if (order.items.length === 0) return "print"
 		return "pay"
-	});
+	})
 
 	const payBtnClickable = computed(() => {
 		if (order.items.length === 0) return false
 		return true
-	});
+	})
 
 	return { order, payBtnLabel, payBtnClickable }
 }

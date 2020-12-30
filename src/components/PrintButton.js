@@ -11,6 +11,8 @@ const printButtonFactory = () => {
 		setup({ msg }) {
 			const { order, payBtnLabel, payBtnClickable } = logicFactory()
 
+			hooks.emit('order', order, e => eval(e));
+
 			const _ref = ref("");
 			watchEffect(() => {
 				_ref.value = msg + " extend";
