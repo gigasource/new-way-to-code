@@ -1,15 +1,18 @@
 import textFieldFactory from './TextField';
-import puppeteer from 'puppeteer';
+const puppeteer = require('puppeteer');
+const path = require('path')
+const { renderToString } = require('@vue/server-renderer')
 const express = require('express')
 const Hooks = require('schemahandler/hooks/hooks')
 const setupTest = require('../../test-utils/setupTest')
-const manifest = require('../../../dist_test/ssr-manifest.json')
 const { toMatchImageSnapshot } = require('jest-image-snapshot')
 const { createSSRApp } = require('vue')
+expect.extend({ toMatchImageSnapshot });
 
 const server = express()
 const port = 3000
 let AppFactory
+let manifest
 const testHook = new Hooks()
 
 describe('Visual:TextField', function () {
@@ -18,7 +21,7 @@ describe('Visual:TextField', function () {
       componentName: 'TextField',
       componentPath: path.resolve(__dirname, './TextFieldUI.vue')
     })
-
+    manifest = require('../../../dist_test/ssr-manifest.json')
     AppFactory = require('../../test-utils/AppFactory').default
 
     let stylesheet = ''
@@ -53,9 +56,30 @@ describe('Visual:TextField', function () {
     server.listen(port, () => console.log(`Listening on: ${port}`))
   })
 
-  it('test print button inject ui', async function (done) {
-    const localTestTextFieldUI = require(path.join(__dirname, '../../dist_test', manifest['main.js'])).default
-    const App = AppFactory(localTestTextFieldUI)
+  it('test text field inject ui', async function (done) {
+    const { hooks, fn } = textFieldFactory()
+
+    hooks.on('label', function (label) {
+      label.value = 'custom label'
+    })
+
+    hooks.on('text', function (text) {
+      text.value = 'test'
+    })
+
+    hooks.on('r:textField', function (label, text, isValidText, textFieldRenderFn) {
+      this.update('textFieldRenderFn', () => {
+        return (
+          <>
+            <div style="color: blue">{label.value}</div>
+            <input style={{ color: isValidText.value ? '#000' : 'red' }} v-model={text.value} />
+          </>
+        )
+      })
+    })
+
+    const App = AppFactory(fn())
+
     testHook.on('App', function (AppWillBeRendered) {
       this.update('AppWillBeRendered', App)
     })
