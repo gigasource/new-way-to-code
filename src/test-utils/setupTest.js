@@ -1,5 +1,6 @@
 const { VueLoaderPlugin } = require('vue-loader')
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require('path')
 const webpack = require('webpack')
 
@@ -30,20 +31,22 @@ module.exports = async function (options) {
 				{
 					test: /\.js?$/,
 					loader: "babel-loader"
-				}
-				// {
-				// 	test: /\.css$/,
-				// 	use: [
-				// 		{
-				// 			loader: MiniCssExtractPlugin.loader,
-				// 			options: { hmr: !env.prod },
-				// 		},
-				// 		"css-loader",
-				// 	],
-				// },
+				},
+				{
+					test: /\.css$/,
+					use: [
+						{
+							loader: MiniCssExtractPlugin.loader,
+						},
+						"css-loader",
+					],
+				},
 			],
 		},
 		plugins: [
+			new MiniCssExtractPlugin({
+				filename: "[name].css",
+			}),
 			new VueLoaderPlugin(),
 			new WebpackManifestPlugin({ fileName: 'ssr-manifest.json' })
 		]

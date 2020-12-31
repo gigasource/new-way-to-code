@@ -22,20 +22,20 @@ jest.setTimeout(60000)
 
 describe('Visual:printButton', function () {
 	beforeAll(async function () {
-		// await setupTest({
-		// 	componentName: 'PrintButton',
-		// 	componentPath: path.resolve(__dirname, './PrintButton.js')
-		// })
-		// const appFactoryPath = path.join(__dirname, '../../dist_test', manifest['main.js'])
+		await setupTest({
+			componentName: 'PrintButton',
+			componentPath: path.resolve(__dirname, './PrintButtonUI.vue')
+		})
+
 		AppFactory = require('../test-utils/AppFactory').default
 
-		// server.use('/img', express.static(pathToSImg))
-		// server.use('/js', express.static(pathToJs))
-		// server.use('/css', express.static(pathToCss))
-		// server.use(
-		// 	"/favicon.ico",
-		// 	express.static(path.join(pathToFavIcon))
-		// );
+		let stylesheet = ''
+		Object.keys(manifest).forEach(file => {
+			if (file.endsWith('css')) {
+				server.use(`/${manifest[file]}`, express.static(path.join(__dirname, '../../dist_test', manifest[file])))
+				stylesheet += `\n<link rel="stylesheet" href=${manifest[file]} />`
+			}
+		})
 
 		server.get('*', async (req, res) => {
 			let AppWillBeRendered
@@ -47,7 +47,7 @@ describe('Visual:printButton', function () {
 			  <html>
 			    <head>
 			      <title>Hello</title>
-			      <link rel="stylesheet" href="${manifest["app.css"]}" />
+			      ${stylesheet}
 			    </head>
 			    <body>
 			      ${appContent}
