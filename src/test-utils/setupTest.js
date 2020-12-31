@@ -13,7 +13,16 @@ module.exports = async function (options) {
 			path: path.resolve(__dirname, '../../dist_test')
 		},
 		resolve: {
-			extensions: ['.vue', '.jsx', '.js', '.json']
+			extensions: ['.vue', '.jsx', '.js', '.json'],
+			alias: {
+				vue: "@vue/runtime-dom",
+			},
+		},
+		externals: {
+			vue: 'vue'
+		},
+		optimization: {
+			minimize: false,
 		},
 		module: {
 			rules: [

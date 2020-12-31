@@ -90,7 +90,8 @@ describe('Visual:printButton', function () {
 	}, 100000)
 
 	it('test print button inject ui', async function (done) {
-		const App = AppFactory(printButtonUI)
+		const localTestPrintButtonUI = require(path.join(__dirname, '../../dist_test', manifest['main.js'])).default
+		const App = AppFactory(localTestPrintButtonUI)
 		testHook.on('App', function (AppWillBeRendered) {
 			this.update('AppWillBeRendered', App)
 		})
