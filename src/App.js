@@ -1,8 +1,10 @@
 import printButtonFactory from './components/PrintButton'
+import TestView from './components/TestView/TestView';
 
 const { hooks, fn } = printButtonFactory()
 
 hooks.on('r:payPrintBtnFn', function (payPrintBtnFn, payBtnLabel, payBtnClickable) {
+  // override render fn
   this.update("payPrintBtnFn", () => (
     <button class={{ "btn-blur": !payBtnClickable.value }}>
       {payBtnLabel.value}
@@ -13,9 +15,9 @@ hooks.on('r:payPrintBtnFn', function (payPrintBtnFn, payBtnLabel, payBtnClickabl
 export default {
   name: 'App',
   components: {
-    PrintButton: fn()
+    PrintButton: fn(),
   },
   render() {
-    return <PrintButton/>
+    return <TestView/>
   }
 }
