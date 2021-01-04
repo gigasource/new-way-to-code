@@ -17,7 +17,7 @@ const simpleFac = () => {
       // hooks allow to customize initial state, ref
       let _initState = {}
       let _initRef = {}
-      hooks.emit('r:init', _initState, _initRef, e => eval(e))
+      hooks.emit('init', { _initState, _initRef }, e => eval(e))
       const state = reactive(_initState)
       const someRef = ref(_initRef)
 
@@ -29,7 +29,9 @@ const simpleFac = () => {
       let _updated = () => {}
 
       // hooks allow to customer vue life cycle
-      hooks.emit('r:lifeCycle', _onCreated, _mounted, _beforeUnmount, _unmounted, e => eval(e))
+      hooks.emit('lifeCycle', {
+        _onCreated, _mounted, _beforeUnmount, _unmounted
+      }, e => eval(e))
       onMounted(_mounted)
       onBeforeMount(_beforeUnmount)
       onBeforeUnmount(_beforeUnmount)
@@ -42,7 +44,7 @@ const simpleFac = () => {
 
       // hooks to customer render function
       let simpleComponentRenderFn = () => <div>Hello there</div>;
-      hooks.emit('r:render', state, someRef, simpleComponentRenderFn, e => eval(e));
+      hooks.emit('render', { state, someRef }, { simpleComponentRenderFn }, e => eval(e));
 
       return simpleComponentRenderFn;
     }
