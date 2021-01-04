@@ -6,7 +6,6 @@ const { renderToString } = require('@vue/server-renderer')
 const printButtonFactory = require('./PrintButton').default
 const Hooks = require('schemahandler/hooks/hooks')
 const setupTest = require('../test-utils/setupTest')
-const manifest = require('../../dist_test/ssr-manifest.json')
 const puppeteer = require('puppeteer')
 const { toMatchImageSnapshot } = require('jest-image-snapshot')
 const printButtonUI = require('./PrintButtonUI.vue').default
@@ -15,11 +14,12 @@ expect.extend({ toMatchImageSnapshot });
 const testHook = new Hooks()
 const port = 3000
 
+let manifest
 const server = express()
+
 let AppFactory
 
 jest.setTimeout(60000)
-
 describe('Visual:printButton', function () {
 	beforeAll(async function () {
 		await setupTest({
@@ -27,6 +27,7 @@ describe('Visual:printButton', function () {
 			componentPath: path.resolve(__dirname, './PrintButtonUI.vue')
 		})
 
+		manifest = require('../../dist_test/ssr-manifest.json')
 		AppFactory = require('../test-utils/AppFactory').default
 
 		let stylesheet = ''

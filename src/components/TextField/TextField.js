@@ -9,6 +9,9 @@ const textFieldFactory = () => {
     setup() {
       const { label, text, isValidText } = logicFactory()
 
+      hooks.emit('label', label, e => eval(e))
+      hooks.emit('text', text, e => eval(e))
+
       let textFieldRenderFn = () => {
         return (
           <>
